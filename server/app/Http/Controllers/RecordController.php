@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entities\Record;
+use App\Services\RecordService;
 use Illuminate\Http\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Http\Requests;
@@ -10,11 +11,13 @@ use App\Http\Requests;
 class RecordController extends ApiController
 {
     protected $recordRepository;
+    protected $recordService;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RecordService $recordService)
     {
         parent::__construct($entityManager);
         $this->recordRepository = $this->em->getRepository(Record::class);
+        $this->recordService = $recordService;
     }
 
     /**
@@ -34,7 +37,6 @@ class RecordController extends ApiController
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -45,7 +47,7 @@ class RecordController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        return $this->recordService->create($request->all());
     }
 
     /**

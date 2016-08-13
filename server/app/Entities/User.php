@@ -3,6 +3,7 @@ namespace App\Entities;
 
 use App\Entities\Columns\Id;
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repositories\UserRepository")
@@ -72,7 +73,7 @@ class User
      */
     public function setPassword($password)
     {
+        $password = Hash::make($password);
         $this->password = $password;
     }
-
 }

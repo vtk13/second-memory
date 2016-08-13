@@ -14,5 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::resource('records', 'RecordController');
+Route::group(['middleware' => ['api']], function () {
+    Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
+    Route::resource('records', 'RecordController');
+});
