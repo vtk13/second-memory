@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+$app->singleton(
+    \Doctrine\ORM\EntityManagerInterface::class,
+    \Doctrine\ORM\EntityManager::class
+);
 /*
 |--------------------------------------------------------------------------
 | Return The Application
