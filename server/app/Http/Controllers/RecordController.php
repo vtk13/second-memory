@@ -27,7 +27,19 @@ class RecordController extends ApiController
      */
     public function index()
     {
-        return $this->findAll(Record::class);
+        $data = [];
+
+        /**
+         * @var Record $record
+         */
+        foreach ($this->findAll(Record::class) as $record) {
+            $data[] = [
+                'text' => $record->getText(),
+                'href' => $record->getHref(),
+                'type' => $record->getType(),
+            ];
+        }
+        return response()->json(['data' => $data]);
     }
 
     /**
