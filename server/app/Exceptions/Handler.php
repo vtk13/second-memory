@@ -45,6 +45,29 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        if ($e instanceof FormException) {
+            return $this->jsonFormExceptionResponse($e);
+        } else {
+            return $this->jsonExceptionResponse($e);
+        }
+    }
+
+    public function jsonFormExceptionResponse(FormException $e)
+    {
+        $data = [
+            'error' => $e->getMessage(),
+            'fields' => $e->getFieldErrors()
+        ];
+
+        return response()->json($data);
+    }
+
+    public function jsonExceptionResponse(\Exception $e)
+    {
+        $data = [
+            'error' => $e->getMessage()
+        ];
+
+        return response()->json($data);
     }
 }
