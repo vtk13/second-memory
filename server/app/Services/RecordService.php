@@ -1,11 +1,14 @@
 <?php
 namespace App\Services;
 
+use App\Common\RemoveEntityTrait;
 use App\Entities\Record;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RecordService
 {
+    use RemoveEntityTrait;
+
     protected $em;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -14,7 +17,7 @@ class RecordService
         $this->em = $entityManager;
     }
 
-    public function create(array $data) : Record
+    public function create(array $data): Record
     {
         $record = new Record();
         $this->em->persist($this->setFields($record, $data));
@@ -23,7 +26,7 @@ class RecordService
         return $record;
     }
 
-    public function update(Record $record, $data) : Record
+    public function update(Record $record, $data): Record
     {
         $this->setFields($record, $data);
         $this->em->flush();

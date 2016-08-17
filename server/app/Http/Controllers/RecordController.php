@@ -27,16 +27,7 @@ class RecordController extends ApiController
      */
     public function index()
     {
-        return $this->recordRepository->findAll();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+        return $this->findAll(Record::class);
     }
 
     /**
@@ -47,7 +38,15 @@ class RecordController extends ApiController
      */
     public function store(Request $request)
     {
-        return $this->recordService->create($request->all());
+        $record =  $this->recordService->create($request->all());
+
+        $data = [
+            'text' => $record->getText(),
+            'href' => $record->getHref(),
+            'type' => $record->getType(),
+        ];
+
+        return response()->json(['data' => $data]);
     }
 
     /**
@@ -61,7 +60,7 @@ class RecordController extends ApiController
         /**
          * @var Record $record
          */
-        $record = $this->recordRepository->find($id);
+        $record = $this->findEntity($id, Record::class);
 
         $data = [
             'text' => $record->getText(),
@@ -73,17 +72,6 @@ class RecordController extends ApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,7 +80,15 @@ class RecordController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        $record =  $this->recordService->update($this->findEntity($id, Record::class), $request->all());
+
+        $data = [
+            'text' => $record->getText(),
+            'href' => $record->getHref(),
+            'type' => $record->getType(),
+        ];
+
+        return response()->json(['data' => $data]);
     }
 
     /**
@@ -103,6 +99,9 @@ class RecordController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $record = $this->findEntity($id, Record::class);
+        $this->recordService->removeEntity($record);
+
+        return response()->json();
     }
 }
